@@ -1,0 +1,4 @@
+---
+
+nodejs_install_source: 'repos'
+nodejs_version: 'stable'

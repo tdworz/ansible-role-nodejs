@@ -1,0 +1,5 @@
+---
+
+- name: Set up Node.js for the Red Hat OS family
+  ansible.builtin.include_tasks: repos/redhat.yml
+  when: nodejs_install_source == 'repos' and ansible_os_family == 'RedHat'

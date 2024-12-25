@@ -2,6 +2,31 @@
 
 An Ansible role to install and configure Node.js.
 
+## Available Variables
+
+| Variable              | Type     | Default  | Description |
+|:----------------------|:--------:|:--------:|:------------|
+| nodejs_install_source | string   | `repos`  | One of the following: `repos`. |
+| nodejs_version        | string   | `stable` | A semantic version number or keyword. If using a semantic version number, you must use one of the following: just the major version (ie. `22`), the major-minor version (ie. `22.12`), or the major-minor-patch version (ie. `22.12.1`). Allowed keywords are: `latest`, `base`, or `stable`. |
+
+#### Installing from Repos
+
+##### RHEL and RHEL Derivatives
+
+If you want to install Node.js from an application stream module, set
+`nodejs_version` to the stream (ie. `22`). The following table shows the
+available streams known when this _README_ was last updated.
+
+| Enterprise Linux Version | Stream | Node.js Version |
+|:------------------------:|:------:|:---------------:|
+| 9                        | `base` | 16.x.x          |
+| 9                        | `18`   | 18.x.x          |
+| 9                        | `20`   | 20.x.x          |
+| 9                        | `22`   | 22.x.x          |
+
+By default, `nodejs_version` is set to `stable` which corresponds to the `base`
+stream. You may also set `nodejs_version` to `latest` to use the latest stream.
+
 ## Copyright &amp; License
 
 Copyright © 2024 Tom "tdworz" Dworzanski.

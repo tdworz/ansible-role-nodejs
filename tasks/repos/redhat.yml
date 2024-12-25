@@ -1,0 +1,60 @@
+---
+
+- name: Install prerequisites
+  ansible.builtin.dnf:
+    name: python3-dnf
+  become: true
+
+- name: Get Node.js base package information from the repos
+  ansible.builtin.command: dnf info nodejs
+  register: dnf_nodejs_base_package_info
+  changed_when: false
+
+- name: Set the Node.js base package version that is in the repos
+  ansible.builtin.set_fact:
+    repos_nodejs_base_version: "{{ dnf_nodejs_base_package_info.stdout |
+                                   regex_search('Version\\s+:\\s+(\\d+)', '\\1') |
+                                   first }}"
+
+- name: Get available Node.js application stream module streams from the repos
+  ansible.builtin.command: dnf module list nodejs
+  register: dnf_nodejs_module_streams_list
+  changed_when: false
+
+- name: Set the Node.js stream versions that are in the repos
+  ansible.builtin.set_fact:
+    repos_nodejs_stream_versions: "{{ dnf_nodejs_module_streams_list.stdout_lines |
+                                      select('match', '^nodejs\\s+\\d+.*$') |
+                                      map('regex_replace', '^nodejs\\s+(\\d+).*$', '\\1') |
+                                      list }}"
+
+- name: Set the Node.js versions that are in the repos
+  ansible.builtin.set_fact:
+    repos_nodejs_versions: "{{ [repos_nodejs_base_version] + repos_nodejs_stream_versions }}"
+
+- name: Re-set nodejs_version when it is set to 'stable' or 'base'
+  ansible.builtin.set_fact:
+    nodejs_version: '{{ repos_nodejs_base_version }}'
+  when: nodejs_version == 'stable' or nodejs_version == 'base'
+
+- name: Re-set nodejs_version when it is set to 'latest'
+  ansible.builtin.set_fact:
+    nodejs_version: "{{ repos_nodejs_versions | max }}"
+  when: nodejs_version == 'latest'
+
+- name: Validate that the requested Node.js version is available
+  ansible.builtin.fail:
+    msg: "Node.js version '{{ nodejs_version }}' is not available in the repos. The available versions are {{ repos_nodejs_versions | join(', ') }}, or you may use 'stable', 'latest', or 'base'."
+  when: nodejs_version not in repos_nodejs_versions
+
+- name: Install Node.js application stream version
+  ansible.builtin.dnf:
+    name: '@nodejs:{{ nodejs_version }}'
+    state: present
+  become: true
+  when: nodejs_version is defined and nodejs_version != repos_nodejs_base_version
+
+- name: Install Node.js
+  ansible.builtin.dnf:
+    name: nodejs
+  become: true
