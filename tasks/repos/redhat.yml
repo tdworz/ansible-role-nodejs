@@ -58,3 +58,11 @@
   ansible.builtin.dnf:
     name: nodejs
   become: true
+
+- name: Install build tools
+  ansible.builtin.dnf:
+    name:
+      - '@Development tools'
+      - nodejs-devel
+  become: true
+  when: nodejs_build_tools is defined and nodejs_build_tools == true

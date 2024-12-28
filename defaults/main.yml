@@ -2,3 +2,4 @@
 
 nodejs_install_source: 'repos'
 nodejs_version: 'stable'
+nodejs_build_tools: true
