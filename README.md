@@ -4,10 +4,10 @@ An Ansible role to install and configure Node.js.
 
 ## Available Variables
 
-| Variable              | Type     | Default  | Description |
-|:----------------------|:--------:|:--------:|:------------|
-| nodejs_install_source | string   | `repos`  | One of the following: `repos`. |
-| nodejs_version        | string   | `stable` | A semantic version number or keyword. If using a semantic version number, you must use one of the following: just the major version (ie. `22`), the major-minor version (ie. `22.12`), or the major-minor-patch version (ie. `22.12.1`). Allowed keywords are: `latest`, `base`, or `stable`. |
+| Variable              |  Type  | Default  | Description                                                                                                                                                                                                                                                                                   |
+|:----------------------|:------:|:--------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| nodejs_install_source | string | `repos`  | One of the following: `repos`.                                                                                                                                                                                                                                                                |
+| nodejs_version        | string | `stable` | A semantic version number or keyword. If using a semantic version number, you must use one of the following: just the major version (ie. `22`), the major-minor version (ie. `22.12`), or the major-minor-patch version (ie. `22.12.1`). Allowed keywords are: `latest`, `base`, or `stable`. |
 
 #### Installing from Repos
 
